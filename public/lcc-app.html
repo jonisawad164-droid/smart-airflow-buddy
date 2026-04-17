@@ -414,12 +414,18 @@ function calc() {
 
 function fmt(v) { return Math.round(v).toLocaleString('sv-SE'); }
 function fmtDec(v,d) { return v.toFixed(d||1); }
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
 
 function renderResultat() {
   if(!lastResult) return;
   var r = lastResult;
-  var ben_bef = document.getElementById('i_ben_bef').value || 'Befintligt';
-  var ben_ny = document.getElementById('i_ben_ny').value || 'Nytt';
+  var ben_bef = esc(document.getElementById('i_ben_bef').value || 'Befintligt');
+  var ben_ny = esc(document.getElementById('i_ben_ny').value || 'Nytt');
+  var ort = esc(r.ort);
   var besparing = r.kostn_bef_tot - r.kostn_ny_tot;
   var payoffOk = isFinite(r.payoff) && r.payoff > 0;
 
@@ -429,7 +435,7 @@ function renderResultat() {
   html += '<div class="payoff-card">';
   html += '<div class="payoff-lbl">Pay-off tid</div>';
   html += '<div class="payoff-val ' + (payoffOk?'payoff-ok':'payoff-bad') + '">' + (payoffOk ? fmtDec(r.payoff,1)+' år' : '–') + '</div>';
-  html += '<div class="payoff-lbl">Besparing ' + fmt(besparing) + ' kr/år  |  Ort: ' + r.ort + '</div>';
+  html += '<div class="payoff-lbl">Besparing ' + fmt(besparing) + ' kr/år  |  Ort: ' + ort + '</div>';
   html += '</div>';
 
   // Jämförelse totalblock
@@ -456,7 +462,7 @@ function renderResultat() {
     html += '<div class="card"><div class="card-title">Per aggregat</div>';
     html += '<table class="res-table"><tr><th>Aggregat</th><th>Drifttid</th><th>' + ben_bef + ' kr/år</th><th>' + ben_ny + ' kr/år</th><th>Besparing</th></tr>';
     r.aggrRes.forEach(function(a) {
-      html += '<tr><td>' + a.namn + '</td><td class="num">' + fmt(a.h_ar) + ' h</td><td class="num">' + fmt(a.kostn_bef) + '</td><td class="num">' + fmt(a.kostn_ny) + '</td><td class="num">' + fmt(a.kostn_bef-a.kostn_ny) + '</td></tr>';
+      html += '<tr><td>' + esc(a.namn) + '</td><td class="num">' + fmt(a.h_ar) + ' h</td><td class="num">' + fmt(a.kostn_bef) + '</td><td class="num">' + fmt(a.kostn_ny) + '</td><td class="num">' + fmt(a.kostn_bef-a.kostn_ny) + '</td></tr>';
     });
     html += '</table></div>';
   }
