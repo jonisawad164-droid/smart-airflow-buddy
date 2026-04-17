@@ -462,7 +462,7 @@ function renderResultat() {
     html += '<div class="card"><div class="card-title">Per aggregat</div>';
     html += '<table class="res-table"><tr><th>Aggregat</th><th>Drifttid</th><th>' + ben_bef + ' kr/år</th><th>' + ben_ny + ' kr/år</th><th>Besparing</th></tr>';
     r.aggrRes.forEach(function(a) {
-      html += '<tr><td>' + a.namn + '</td><td class="num">' + fmt(a.h_ar) + ' h</td><td class="num">' + fmt(a.kostn_bef) + '</td><td class="num">' + fmt(a.kostn_ny) + '</td><td class="num">' + fmt(a.kostn_bef-a.kostn_ny) + '</td></tr>';
+      html += '<tr><td>' + esc(a.namn) + '</td><td class="num">' + fmt(a.h_ar) + ' h</td><td class="num">' + fmt(a.kostn_bef) + '</td><td class="num">' + fmt(a.kostn_ny) + '</td><td class="num">' + fmt(a.kostn_bef-a.kostn_ny) + '</td></tr>';
     });
     html += '</table></div>';
   }
