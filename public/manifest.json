@@ -1,0 +1,26 @@
+{
+  "name": "Bravida LCC – Ventilation",
+  "short_name": "Bravida LCC",
+  "description": "LCC-beräkning för ventilationsaggregat – jämför befintligt mot nytt med SMHI-klimatdata.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#005ca9",
+  "lang": "sv-SE",
+  "icons": [
+    {
+      "src": "/app-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/app-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
