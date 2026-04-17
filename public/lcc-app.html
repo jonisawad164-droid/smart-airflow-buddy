@@ -414,12 +414,18 @@ function calc() {
 
 function fmt(v) { return Math.round(v).toLocaleString('sv-SE'); }
 function fmtDec(v,d) { return v.toFixed(d||1); }
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
 
 function renderResultat() {
   if(!lastResult) return;
   var r = lastResult;
-  var ben_bef = document.getElementById('i_ben_bef').value || 'Befintligt';
-  var ben_ny = document.getElementById('i_ben_ny').value || 'Nytt';
+  var ben_bef = esc(document.getElementById('i_ben_bef').value || 'Befintligt');
+  var ben_ny = esc(document.getElementById('i_ben_ny').value || 'Nytt');
+  var ort = esc(r.ort);
   var besparing = r.kostn_bef_tot - r.kostn_ny_tot;
   var payoffOk = isFinite(r.payoff) && r.payoff > 0;
 
