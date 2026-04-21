@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="LCC Belysning">
+<meta name="theme-color" content="#1e4a7a">
+<title>LCC-beräkning – Allmän belysning</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f8;color:#1a1a1a;padding-bottom:80px}
+.topbar{background:#1e4a7a;color:#fff;padding:14px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:10px}
+.back{background:rgba(255,255,255,0.15);border:none;color:#fff;padding:6px 10px;border-radius:8px;font-size:13px;cursor:pointer;text-decoration:none}
+.topbar h1{font-size:16px;font-weight:700;margin-bottom:1px;flex:1}
+.topbar p{font-size:11px;color:#a8c8e0}
+.tabs{display:flex;overflow-x:auto;background:#163d66;gap:2px;padding:6px 8px;scrollbar-width:none;position:sticky;top:50px;z-index:99}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:7px 14px;font-size:12px;font-weight:600;color:#a8c8e0;border-radius:8px;cursor:pointer;white-space:nowrap;border:none;background:transparent}
+.tab.active{background:#fff;color:#1e4a7a}
+.page{display:none;padding:12px}
+.page.active{display:block}
+.card{background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+.card-title{font-size:12px;font-weight:700;color:#1e4a7a;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px}
+.row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f0f0f0}
+.row:last-child{border-bottom:none}
+.row label{font-size:14px;color:#333;flex:1;line-height:1.3}
+.row input,.row select{padding:7px 10px;font-size:14px;border:1px solid #ddd;border-radius:8px;background:#f8f9fa;color:#1a1a1a;-webkit-appearance:none}
+.row input[type=number],.row input[type=text]{width:130px;text-align:right}
+.row input:focus,.row select:focus{outline:2px solid #1e4a7a;background:#fff}
+.unit{font-size:12px;color:#888;min-width:42px}
+.mode-toggle{display:flex;background:#e8f0f8;border-radius:10px;padding:4px;margin-bottom:12px}
+.mode-btn{flex:1;padding:10px;font-size:13px;font-weight:700;border:none;background:transparent;color:#1e4a7a;border-radius:8px;cursor:pointer}
+.mode-btn.active{background:#1e4a7a;color:#fff}
+.side-by-side{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #f0f0f0;border-radius:14px;overflow:hidden;background:#fff;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+.side-col{padding:12px}
+.side-col:first-child{border-right:1px solid #f0f0f0}
+.side-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;padding:5px 8px;border-radius:6px;text-align:center}
+.side-bef .side-label{background:#fff3cd;color:#7d4e00}
+.side-ny .side-label{background:#d4edda;color:#155724}
+.side-row{display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid #f5f5f5}
+.side-row:last-child{border-bottom:none}
+.side-row label{font-size:12px;color:#555;flex:1;line-height:1.3}
+.side-row input{width:80px;padding:6px 8px;font-size:13px;text-align:right;border:1px solid #ddd;border-radius:7px;background:#f8f9fa;-webkit-appearance:none}
+.side-row input:focus{outline:2px solid #1e4a7a;background:#fff}
+.side-row .unit{font-size:11px;color:#888;min-width:32px}
+.side-row .calc{font-size:13px;font-weight:700;color:#1e4a7a;width:80px;text-align:right;padding:6px 8px}
+.name-row{display:flex;gap:6px;padding:6px 0 10px}
+.name-row input{flex:1;padding:6px 8px;font-size:13px;border:1px solid #ddd;border-radius:7px;background:#f8f9fa}
+.res-compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.res-col{background:#fff;border-radius:12px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+.res-col-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;text-align:center;padding:5px;border-radius:6px}
+.res-col-bef .res-col-title{background:#fff3cd;color:#7d4e00}
+.res-col-ny .res-col-title{background:#d4edda;color:#155724}
+.res-item{padding:7px 0;border-bottom:1px solid #f0f0f0;text-align:center}
+.res-item:last-child{border-bottom:none}
+.res-val{font-size:18px;font-weight:700;color:#1e4a7a}
+.res-lbl{font-size:11px;color:#888;margin-top:1px}
+.payoff-card{background:#1e4a7a;color:#fff;border-radius:14px;padding:18px;text-align:center;margin-bottom:12px}
+.payoff-val{font-size:36px;font-weight:700;margin:6px 0}
+.payoff-lbl{font-size:13px;color:#a8c8e0}
+.payoff-ok{color:#4fc3a1}
+.payoff-bad{color:#ff6b6b}
+.bc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.bc-card{background:#fff;border-radius:12px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,0.08);text-align:center}
+.bc-val{font-size:22px;font-weight:700;color:#1e4a7a;margin:4px 0}
+.bc-lbl{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px}
+.bc-card.green .bc-val{color:#155724}
+.bc-card.amber .bc-val{color:#b8860b}
+.note{font-size:11px;color:#888;font-style:italic;padding:6px 4px;line-height:1.4}
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e0e0e0;padding:8px 16px;display:flex;gap:6px;z-index:98}
+.stat{text-align:center;flex:1}
+.stat-n{font-size:15px;font-weight:700;color:#1e4a7a}
+.stat-l{font-size:10px;color:#888}
+@media (min-width:768px){
+  body{max-width:900px;margin:0 auto;background:#fff;box-shadow:0 0 30px rgba(0,0,0,0.05)}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="/" class="back">← Hem</a>
+  <div style="flex:1">
+    <h1>LCC – Allmän belysning</h1>
+    <p>Bravida hotellbelysning</p>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" data-page="indata">Indata</button>
+  <button class="tab" data-page="belysning">Belysning</button>
+  <button class="tab" data-page="resultat">Resultat</button>
+  <button class="tab" data-page="business">Business case</button>
+</div>
+
+<!-- INDATA -->
+<section class="page active" id="page-indata">
+  <div class="card">
+    <div class="card-title">Projekt</div>
+    <div class="row"><label>Projekt</label><input type="text" id="i_projekt" value="Hotell exempel"></div>
+    <div class="row"><label>Referensnummer</label><input type="text" id="i_ref" value=""></div>
+    <div class="row"><label>Handläggare</label><input type="text" id="i_handl" value=""></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Ekonomi</div>
+    <div class="row"><label>Elpris</label><input type="number" id="i_elpris" value="1.50" step="0.01"><span class="unit">kr/kWh</span></div>
+    <div class="row"><label>Real energiprisökning</label><input type="number" id="i_eprisokn" value="2.0" step="0.1"><span class="unit">%</span></div>
+    <div class="row"><label>Real kalkylränta</label><input type="number" id="i_ranta" value="5.5" step="0.1"><span class="unit">%</span></div>
+    <div class="row"><label>Brukstid (kalkylperiod)</label><input type="number" id="i_brukstid" value="15" step="1"><span class="unit">år</span></div>
+    <div class="row"><label>CO₂ per kWh el</label><input type="number" id="i_co2" value="50" step="1"><span class="unit">g/kWh</span></div>
+    <div class="note">Specifikt nuvärde beräknas automatiskt från elpris, prisökning, kalkylränta och brukstid.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Lokal</div>
+    <div class="row"><label>Lokalarea</label><input type="number" id="i_area" value="500" step="1"><span class="unit">m²</span></div>
+    <div class="row"><label>Drifttid per år</label><input type="number" id="i_drifttid" value="4000" step="100"><span class="unit">h/år</span></div>
+    <div class="note">Hotell typiskt: rum 2000–3000 h, korridorer/lobby 4000–8760 h.</div>
+  </div>
+</section>
+
+<!-- BELYSNING -->
+<section class="page" id="page-belysning">
+  <div class="mode-toggle">
+    <button class="mode-btn active" data-mode="enkel">Enkelt (armaturer)</button>
+    <button class="mode-btn" data-mode="avancerat">Avancerat (kW direkt)</button>
+  </div>
+
+  <div class="side-by-side">
+    <div class="side-col side-bef">
+      <div class="side-label">Befintligt</div>
+      <div class="name-row"><input type="text" id="i_ben_bef" value="Befintligt" maxlength="60" placeholder="Namn"></div>
+
+      <!-- Enkel mode -->
+      <div class="mode-enkel">
+        <div class="side-row"><label>Antal armaturer</label><input type="number" id="bef_antal" value="50" step="1"><span class="unit">st</span></div>
+        <div class="side-row"><label>Effekt per armatur</label><input type="number" id="bef_w" value="60" step="1"><span class="unit">W</span></div>
+        <div class="side-row"><label>Inköpspris/st</label><input type="number" id="bef_pris" value="0" step="10"><span class="unit">kr</span></div>
+        <div class="side-row"><label>Installation/st</label><input type="number" id="bef_inst" value="0" step="10"><span class="unit">kr</span></div>
+        <div class="side-row"><label>Livslängd L80/B10</label><input type="number" id="bef_liv" value="15000" step="1000"><span class="unit">h</span></div>
+        <div class="side-row"><label>Total effekt</label><span class="calc" id="bef_kw_calc">–</span><span class="unit">kW</span></div>
+      </div>
+
+      <!-- Avancerat mode -->
+      <div class="mode-avancerat" style="display:none">
+        <div class="side-row"><label>Installerad effekt</label><input type="number" id="bef_kw_man" value="3.0" step="0.1"><span class="unit">kW</span></div>
+        <div class="side-row"><label>Total investering</label><input type="number" id="bef_inv_man" value="0" step="100"><span class="unit">kr</span></div>
+      </div>
+    </div>
+
+    <div class="side-col side-ny">
+      <div class="side-label">Nytt (LED)</div>
+      <div class="name-row"><input type="text" id="i_ben_ny" value="LED" maxlength="60" placeholder="Namn"></div>
+
+      <div class="mode-enkel">
+        <div class="side-row"><label>Antal armaturer</label><input type="number" id="ny_antal" value="50" step="1"><span class="unit">st</span></div>
+        <div class="side-row"><label>Effekt per armatur</label><input type="number" id="ny_w" value="36" step="1"><span class="unit">W</span></div>
+        <div class="side-row"><label>Inköpspris/st</label><input type="number" id="ny_pris" value="800" step="10"><span class="unit">kr</span></div>
+        <div class="side-row"><label>Installation/st</label><input type="number" id="ny_inst" value="400" step="10"><span class="unit">kr</span></div>
+        <div class="side-row"><label>Livslängd L80/B10</label><input type="number" id="ny_liv" value="50000" step="1000"><span class="unit">h</span></div>
+        <div class="side-row"><label>Total effekt</label><span class="calc" id="ny_kw_calc">–</span><span class="unit">kW</span></div>
+      </div>
+
+      <div class="mode-avancerat" style="display:none">
+        <div class="side-row"><label>Installerad effekt</label><input type="number" id="ny_kw_man" value="1.8" step="0.1"><span class="unit">kW</span></div>
+        <div class="side-row"><label>Total investering</label><input type="number" id="ny_inv_man" value="60000" step="100"><span class="unit">kr</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Specifikt effektbehov (W/m²)</div>
+    <div class="res-compare" style="margin:0">
+      <div class="res-col res-col-bef">
+        <div class="res-col-title" id="bef_label_wm2">Befintligt</div>
+        <div class="res-item"><div class="res-val" id="bef_wm2">–</div><div class="res-lbl">W/m²</div></div>
+      </div>
+      <div class="res-col res-col-ny">
+        <div class="res-col-title" id="ny_label_wm2">Nytt</div>
+        <div class="res-item"><div class="res-val" id="ny_wm2">–</div><div class="res-lbl">W/m²</div></div>
+      </div>
+    </div>
+    <div class="note">BBR rekommendation kontor/hotell: ≤ 8 W/m². Modern LED-belysning klarar 4–6 W/m².</div>
+  </div>
+</section>
+
+<!-- RESULTAT -->
+<section class="page" id="page-resultat">
+  <div class="card">
+    <div class="card-title">Förutsättningar</div>
+    <div class="row"><label>Specifikt nuvärde el</label><span class="calc" id="r_nuvarde" style="font-weight:700;color:#1e4a7a">–</span><span class="unit">kr/kWh</span></div>
+    <div class="row"><label>Brukstid</label><span class="calc" id="r_brukstid">–</span><span class="unit">år</span></div>
+  </div>
+
+  <div class="res-compare">
+    <div class="res-col res-col-bef">
+      <div class="res-col-title" id="r_bef_label">Befintligt</div>
+      <div class="res-item"><div class="res-val" id="r_bef_kwh">–</div><div class="res-lbl">kWh / år</div></div>
+      <div class="res-item"><div class="res-val" id="r_bef_kr">–</div><div class="res-lbl">kr / år</div></div>
+      <div class="res-item"><div class="res-val" id="r_bef_lcce">–</div><div class="res-lbl">LCCE energi</div></div>
+      <div class="res-item"><div class="res-val" id="r_bef_inv">–</div><div class="res-lbl">Investering</div></div>
+      <div class="res-item"><div class="res-val" id="r_bef_tot">–</div><div class="res-lbl">Totalkostnad</div></div>
+    </div>
+    <div class="res-col res-col-ny">
+      <div class="res-col-title" id="r_ny_label">Nytt</div>
+      <div class="res-item"><div class="res-val" id="r_ny_kwh">–</div><div class="res-lbl">kWh / år</div></div>
+      <div class="res-item"><div class="res-val" id="r_ny_kr">–</div><div class="res-lbl">kr / år</div></div>
+      <div class="res-item"><div class="res-val" id="r_ny_lcce">–</div><div class="res-lbl">LCCE energi</div></div>
+      <div class="res-item"><div class="res-val" id="r_ny_inv">–</div><div class="res-lbl">Investering</div></div>
+      <div class="res-item"><div class="res-val" id="r_ny_tot">–</div><div class="res-lbl">Totalkostnad</div></div>
+    </div>
+  </div>
+
+  <div class="payoff-card">
+    <div class="payoff-lbl">Pay-off tid</div>
+    <div class="payoff-val" id="r_payoff">–</div>
+    <div class="payoff-lbl" id="r_payoff_sub">år</div>
+  </div>
+</section>
+
+<!-- BUSINESS CASE -->
+<section class="page" id="page-business">
+  <div class="card">
+    <div class="card-title">Hotell business case</div>
+    <div class="note">Pitch-vänlig sammanfattning för fastighetsägare/hotellägare.</div>
+  </div>
+
+  <div class="bc-grid">
+    <div class="bc-card green">
+      <div class="bc-lbl">Årlig besparing</div>
+      <div class="bc-val" id="b_besparing_kr">–</div>
+      <div class="bc-lbl">kr / år</div>
+    </div>
+    <div class="bc-card">
+      <div class="bc-lbl">Energibesparing</div>
+      <div class="bc-val" id="b_besparing_kwh">–</div>
+      <div class="bc-lbl">kWh / år</div>
+    </div>
+    <div class="bc-card amber">
+      <div class="bc-lbl">Minskning</div>
+      <div class="bc-val" id="b_minsk_pct">–</div>
+      <div class="bc-lbl">% av elförbrukning</div>
+    </div>
+    <div class="bc-card green">
+      <div class="bc-lbl">CO₂-besparing</div>
+      <div class="bc-val" id="b_co2">–</div>
+      <div class="bc-lbl">kg CO₂ / år</div>
+    </div>
+    <div class="bc-card">
+      <div class="bc-lbl">Total investering (Nytt)</div>
+      <div class="bc-val" id="b_invest">–</div>
+      <div class="bc-lbl">kr</div>
+    </div>
+    <div class="bc-card amber">
+      <div class="bc-lbl">ROI över brukstid</div>
+      <div class="bc-val" id="b_roi">–</div>
+      <div class="bc-lbl">% (besparing/invest)</div>
+    </div>
+    <div class="bc-card">
+      <div class="bc-lbl">Pay-off</div>
+      <div class="bc-val" id="b_payoff">–</div>
+      <div class="bc-lbl">år</div>
+    </div>
+    <div class="bc-card green">
+      <div class="bc-lbl">Total besparing</div>
+      <div class="bc-val" id="b_tot_besp">–</div>
+      <div class="bc-lbl">över brukstid</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Sammanfattning</div>
+    <div id="b_summary" style="font-size:14px;line-height:1.6;color:#333">–</div>
+  </div>
+</section>
+
+<div class="bottom-bar">
+  <div class="stat"><div class="stat-n" id="bb_save">–</div><div class="stat-l">kr/år sparat</div></div>
+  <div class="stat"><div class="stat-n" id="bb_payoff">–</div><div class="stat-l">år payoff</div></div>
+  <div class="stat"><div class="stat-n" id="bb_co2">–</div><div class="stat-l">kg CO₂/år</div></div>
+</div>
+
+<script>
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function n(id){var v=parseFloat(document.getElementById(id).value);return isNaN(v)?0:v;}
+function s(id){return document.getElementById(id).value||'';}
+function fmt(x,d){if(!isFinite(x))return '–';d=d||0;return x.toLocaleString('sv-SE',{minimumFractionDigits:d,maximumFractionDigits:d});}
+function fmtKr(x){if(!isFinite(x))return '–';return Math.round(x).toLocaleString('sv-SE')+' kr';}
+
+var mode='enkel';
+
+// Tabs
+document.querySelectorAll('.tab').forEach(function(t){
+  t.addEventListener('click',function(){
+    document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active');});
+    document.querySelectorAll('.page').forEach(function(x){x.classList.remove('active');});
+    t.classList.add('active');
+    document.getElementById('page-'+t.dataset.page).classList.add('active');
+  });
+});
+
+// Mode toggle
+document.querySelectorAll('.mode-btn').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.mode-btn').forEach(function(x){x.classList.remove('active');});
+    b.classList.add('active');
+    mode=b.dataset.mode;
+    document.querySelectorAll('.mode-enkel').forEach(function(e){e.style.display=mode==='enkel'?'':'none';});
+    document.querySelectorAll('.mode-avancerat').forEach(function(e){e.style.display=mode==='avancerat'?'':'none';});
+    calc();
+  });
+});
+
+function getKW(prefix){
+  if(mode==='enkel'){
+    return n(prefix+'_antal')*n(prefix+'_w')/1000;
+  }
+  return n(prefix+'_kw_man');
+}
+function getInvest(prefix){
+  if(mode==='enkel'){
+    return n(prefix+'_antal')*(n(prefix+'_pris')+n(prefix+'_inst'));
+  }
+  return n(prefix+'_inv_man');
+}
+
+function calc(){
+  var elpris=n('i_elpris');
+  var ep=n('i_eprisokn')/100;
+  var r=n('i_ranta')/100;
+  var T=n('i_brukstid');
+  var area=n('i_area');
+  var drift=n('i_drifttid');
+  var co2g=n('i_co2');
+
+  // Specifikt nuvärde via PV-formel: -PV((r-ep), T, elpris)
+  // PV(rate,nper,pmt) = pmt * (1-(1+rate)^-nper)/rate
+  var rate=r-ep;
+  var nuvarde;
+  if(Math.abs(rate)<1e-9){nuvarde=elpris*T;}
+  else{nuvarde=elpris*(1-Math.pow(1+rate,-T))/rate;}
+
+  var bef_kw=getKW('bef'),ny_kw=getKW('ny');
+  var bef_kwh=bef_kw*drift,ny_kwh=ny_kw*drift;
+  var bef_kr=bef_kwh*elpris,ny_kr=ny_kwh*elpris;
+  var bef_lcce=bef_kwh*nuvarde,ny_lcce=ny_kwh*nuvarde;
+  var bef_inv=getInvest('bef'),ny_inv=getInvest('ny');
+  var bef_tot=bef_lcce+bef_inv,ny_tot=ny_lcce+ny_inv;
+
+  var bef_wm2=area>0?bef_kw*1000/area:0;
+  var ny_wm2=area>0?ny_kw*1000/area:0;
+
+  var besp_kwh=bef_kwh-ny_kwh;
+  var besp_kr=bef_kr-ny_kr;
+  var minsk_pct=bef_kwh>0?(besp_kwh/bef_kwh)*100:0;
+  var co2_kg=besp_kwh*co2g/1000;
+  var diff_inv=ny_inv-bef_inv;
+  var payoff=besp_kr>0&&diff_inv>0?diff_inv/besp_kr:(diff_inv<=0&&besp_kr>0?0:NaN);
+  var roi=ny_inv>0?(besp_kr*T/ny_inv)*100:NaN;
+  var tot_besp=besp_kr*T;
+
+  // Set labels with escaping
+  var bef_label=esc(s('i_ben_bef'));
+  var ny_label=esc(s('i_ben_ny'));
+  document.getElementById('bef_label_wm2').textContent=bef_label||'Befintligt';
+  document.getElementById('ny_label_wm2').textContent=ny_label||'Nytt';
+  document.getElementById('r_bef_label').textContent=bef_label||'Befintligt';
+  document.getElementById('r_ny_label').textContent=ny_label||'Nytt';
+
+  // Belysning page
+  document.getElementById('bef_kw_calc').textContent=fmt(bef_kw,2);
+  document.getElementById('ny_kw_calc').textContent=fmt(ny_kw,2);
+  document.getElementById('bef_wm2').textContent=fmt(bef_wm2,1);
+  document.getElementById('ny_wm2').textContent=fmt(ny_wm2,1);
+
+  // Resultat
+  document.getElementById('r_nuvarde').textContent=fmt(nuvarde,2);
+  document.getElementById('r_brukstid').textContent=fmt(T,0);
+  document.getElementById('r_bef_kwh').textContent=fmt(bef_kwh,0);
+  document.getElementById('r_bef_kr').textContent=fmtKr(bef_kr);
+  document.getElementById('r_bef_lcce').textContent=fmtKr(bef_lcce);
+  document.getElementById('r_bef_inv').textContent=fmtKr(bef_inv);
+  document.getElementById('r_bef_tot').textContent=fmtKr(bef_tot);
+  document.getElementById('r_ny_kwh').textContent=fmt(ny_kwh,0);
+  document.getElementById('r_ny_kr').textContent=fmtKr(ny_kr);
+  document.getElementById('r_ny_lcce').textContent=fmtKr(ny_lcce);
+  document.getElementById('r_ny_inv').textContent=fmtKr(ny_inv);
+  document.getElementById('r_ny_tot').textContent=fmtKr(ny_tot);
+
+  var pEl=document.getElementById('r_payoff');
+  var pSub=document.getElementById('r_payoff_sub');
+  if(!isFinite(payoff)){pEl.textContent='–';pEl.className='payoff-val';pSub.textContent='Ingen besparing';}
+  else if(payoff===0){pEl.textContent='Direkt';pEl.className='payoff-val payoff-ok';pSub.textContent='Lägre invest + lägre drift';}
+  else{pEl.textContent=fmt(payoff,1);pEl.className='payoff-val '+(payoff<=T?'payoff-ok':'payoff-bad');pSub.textContent='år (av '+fmt(T,0)+' brukstid)';}
+
+  // Business case
+  document.getElementById('b_besparing_kr').textContent=fmtKr(besp_kr);
+  document.getElementById('b_besparing_kwh').textContent=fmt(besp_kwh,0);
+  document.getElementById('b_minsk_pct').textContent=fmt(minsk_pct,1)+' %';
+  document.getElementById('b_co2').textContent=fmt(co2_kg,0);
+  document.getElementById('b_invest').textContent=fmtKr(ny_inv);
+  document.getElementById('b_roi').textContent=isFinite(roi)?fmt(roi,0)+' %':'–';
+  document.getElementById('b_payoff').textContent=isFinite(payoff)?fmt(payoff,1):'–';
+  document.getElementById('b_tot_besp').textContent=fmtKr(tot_besp);
+
+  var summary='Genom att byta från <strong>'+bef_label+'</strong> ('+fmt(bef_kw,2)+' kW) till <strong>'+ny_label+'</strong> ('+fmt(ny_kw,2)+' kW) sparas '+
+    '<strong>'+fmtKr(besp_kr)+'/år</strong> i elkostnad och <strong>'+fmt(co2_kg,0)+' kg CO₂/år</strong>. '+
+    'Investeringen på <strong>'+fmtKr(ny_inv)+'</strong> betalar tillbaka sig på '+
+    (isFinite(payoff)?(payoff===0?'<strong>direkt</strong>':'<strong>'+fmt(payoff,1)+' år</strong>'):'–')+
+    '. Över '+fmt(T,0)+' år ger åtgärden <strong>'+fmtKr(tot_besp)+'</strong> i total besparing.';
+  document.getElementById('b_summary').innerHTML=summary;
+
+  // Bottom bar
+  document.getElementById('bb_save').textContent=isFinite(besp_kr)?Math.round(besp_kr).toLocaleString('sv-SE'):'–';
+  document.getElementById('bb_payoff').textContent=isFinite(payoff)?fmt(payoff,1):'–';
+  document.getElementById('bb_co2').textContent=fmt(co2_kg,0);
+}
+
+document.querySelectorAll('input').forEach(function(el){el.addEventListener('input',calc);});
+calc();
+</script>
+</body>
+</html>
