@@ -1,4 +1,6 @@
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Home } from "lucide-react";
 
 const Belysning = () => {
   useEffect(() => {
@@ -16,12 +18,23 @@ const Belysning = () => {
   }, []);
 
   return (
-    <main className="min-h-screen w-full">
+    <main className="flex flex-col w-full" style={{ height: "100dvh" }}>
       <h1 className="sr-only">LCC-beräkning för allmän belysning – Bravida</h1>
+      <div className="flex items-center gap-2 px-3 py-2 bg-[#163d66] text-white shrink-0">
+        <Link
+          to="/"
+          aria-label="Till startsidan"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/15 hover:bg-white/25 text-sm font-medium"
+        >
+          <Home className="w-4 h-4" />
+          Hem
+        </Link>
+        <span className="text-xs text-[#a8c8e0]">LCC – Allmän belysning</span>
+      </div>
       <iframe
         src="/belysning-app.html"
         title="LCC-beräkning Allmän belysning"
-        className="w-full h-screen border-0 block"
+        className="w-full flex-1 border-0 block"
       />
     </main>
   );
