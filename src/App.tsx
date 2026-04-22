@@ -7,6 +7,8 @@ import Home from "./pages/Home.tsx";
 import Ventilation from "./pages/Ventilation.tsx";
 import Belysning from "./pages/Belysning.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import Auth from "./pages/Auth.tsx";
+import ProtectedRoute from "./components/ProtectedRoute.tsx";
 
 const queryClient = new QueryClient();
 
@@ -17,9 +19,10 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/ventilation" element={<Ventilation />} />
-          <Route path="/belysning" element={<Belysning />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/ventilation" element={<ProtectedRoute><Ventilation /></ProtectedRoute>} />
+          <Route path="/belysning" element={<ProtectedRoute><Belysning /></ProtectedRoute>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
