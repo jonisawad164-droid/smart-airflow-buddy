@@ -29,7 +29,7 @@ const Belysning = () => {
         Hem
       </Link>
       <iframe
-        src="/belysning-app.html"
+      src={`${import.meta.env.BASE_URL}belysning-app.html`}
         title="LCC-beräkning Allmän belysning"
         className="w-full h-full border-0 block"
       />
