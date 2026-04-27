@@ -9,18 +9,21 @@
 <title>LCC-beräkning – Ventilationsaggregat</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f8;color:#1a1a1a;padding-bottom:80px}
-.topbar{background:#1e4a7a;color:#fff;padding:14px 16px;position:sticky;top:0;z-index:100}
+:root{--br-blue:#006390;--br-dark:#00354E;--br-green:#34E0A1;--br-sky:#C9E8FB;--br-bg:#eef6fb}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--br-bg);color:#1a1a1a;padding-bottom:96px}
+.topbar{background:linear-gradient(135deg,var(--br-dark),var(--br-blue));color:#fff;padding:14px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;box-shadow:0 6px 18px rgba(0,53,78,.18)}
+.brandmark{width:34px;height:34px;border-radius:12px;background:rgba(255,255,255,.14);position:relative;flex:0 0 34px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.brandmark:before,.brandmark:after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--br-green);border-radius:999px}.brandmark:before{width:8px;height:24px}.brandmark:after{width:24px;height:8px}.brandmark i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:9px;height:9px;background:var(--br-blue);border-radius:50%}
 .topbar h1{font-size:16px;font-weight:700;margin-bottom:1px}
-.topbar p{font-size:11px;color:#a8c8e0}
-.tabs{display:flex;overflow-x:auto;background:#163d66;gap:2px;padding:52px 8px 8px 8px;scrollbar-width:none;position:sticky;top:0;z-index:99}
+.topbar p{font-size:11px;color:rgba(255,255,255,.72)}
+.tabs{display:flex;overflow-x:auto;background:var(--br-dark);gap:2px;padding:8px;scrollbar-width:none;position:sticky;top:62px;z-index:99;box-shadow:0 4px 14px rgba(0,53,78,.10)}
 .tabs::-webkit-scrollbar{display:none}
 .tab{flex-shrink:0;padding:7px 14px;font-size:12px;font-weight:600;color:#a8c8e0;border-radius:8px;cursor:pointer;white-space:nowrap;border:none;background:transparent}
-.tab.active{background:#fff;color:#1e4a7a}
+.tab.active{background:#fff;color:var(--br-blue)}
 .page{display:none;padding:12px}
 .page.active{display:block}
 .card{background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
-.card-title{font-size:12px;font-weight:700;color:#1e4a7a;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px}
+.card-title{font-size:12px;font-weight:800;color:var(--br-blue);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px}
 .row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #f0f0f0}
 .row:last-child{border-bottom:none}
 .row label{font-size:14px;color:#333;flex:1;line-height:1.3}
@@ -30,7 +33,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .row input:focus,.row select:focus{outline:2px solid #1e4a7a;background:#fff}
 .unit{font-size:12px;color:#888;min-width:32px}
 .aggr-wrap{background:#fff;border-radius:14px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.08);overflow:hidden}
-.aggr-hdr{background:#1e4a7a;color:#fff;padding:10px 14px;display:flex;justify-content:space-between;align-items:center}
+.aggr-hdr{background:var(--br-blue);color:#fff;padding:10px 14px;display:flex;justify-content:space-between;align-items:center}
 .aggr-hdr-title{font-size:14px;font-weight:700}
 .aggr-del{background:rgba(255,255,255,0.2);border:none;color:#fff;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer}
 .side-by-side{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #f0f0f0}
@@ -63,7 +66,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .res-item:last-child{border-bottom:none}
 .res-val{font-size:18px;font-weight:700;color:#1e4a7a}
 .res-lbl{font-size:11px;color:#888;margin-top:1px}
-.payoff-card{background:#1e4a7a;color:#fff;border-radius:14px;padding:16px;text-align:center;margin-bottom:12px}
+.payoff-card{background:linear-gradient(135deg,var(--br-dark),var(--br-blue));color:#fff;border-radius:14px;padding:16px;text-align:center;margin-bottom:12px}
 .payoff-val{font-size:36px;font-weight:700;margin:6px 0}
 .payoff-lbl{font-size:13px;color:#a8c8e0}
 .payoff-ok{color:#4fc3a1}
@@ -73,13 +76,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .res-table td{padding:7px 8px;border:1px solid #ddd;vertical-align:top}
 .res-table td.num{text-align:right;font-weight:600}
 .res-table tr.subtot td{background:#f8f9fa;font-weight:700}
-.res-table tr.tot td{background:#1e4a7a;color:#fff;font-weight:700}
+.res-table tr.tot td{background:var(--br-blue);color:#fff;font-weight:700}
 .bottom-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e0e0e0;padding:8px 16px;display:flex;gap:6px;z-index:98}
 .stat{text-align:center;flex:1}
-.stat-n{font-size:15px;font-weight:700;color:#1e4a7a}
+.stat-n{font-size:15px;font-weight:800;color:var(--br-blue)}
 .stat-l{font-size:10px;color:#888}
 .note{font-size:12px;color:#888;font-style:italic;padding:4px 0 8px;line-height:1.5}
-.warn{background:#fff3cd;border-left:3px solid #e0a000;padding:8px 10px;border-radius:0 8px 8px 0;font-size:13px;color:#7d4e00;margin-bottom:10px}
+.warn{background:#fff3cd;border-left:3px solid #e0a000;padding:8px 10px;border-radius:0 8px 8px 0;font-size:13px;color:#7d4e00;margin-bottom:10px}.ok{background:#e8fff6;border-left:3px solid var(--br-green);padding:8px 10px;border-radius:0 8px 8px 0;font-size:13px;color:#006047;margin-bottom:10px}.bc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}.bc-card{background:#fff;border-radius:14px;padding:14px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.08)}.bc-val{font-size:22px;font-weight:800;color:var(--br-blue);margin:3px 0}.bc-lbl{font-size:11px;color:#667;text-transform:uppercase;letter-spacing:.45px}.tag{display:inline-block;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:800;background:var(--br-sky);color:var(--br-dark)}.tag.good{background:#d4f8e9;color:#006047}.tag.warn{background:#fff3cd;color:#7d4e00}.tag.bad{background:#ffe0e0;color:#8a1f1f}
 @media (max-width:600px){
   .side-by-side{grid-template-columns:1fr}
   .side-col:first-child{border-right:none;border-bottom:1px solid #f0f0f0}
@@ -90,18 +93,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   .side-row .calc{width:70px}
   .payoff-val{font-size:30px}
   body{padding-bottom:90px}
-  .res-table{font-size:11px}
+  .res-table{font-size:11px}.bc-grid{grid-template-columns:1fr}
   .res-table th,.res-table td{padding:5px 4px}
 }
 </style>
 </head>
 <body>
 
+<header class="topbar"><div class="brandmark"><i></i></div><div><h1>bravida Smart Airflow</h1><p>LCC · SFP · energioptimering · kundunderlag</p></div></header>
 
 <div class="tabs">
   <button class="tab active" onclick="showPage('indata',this)">Indata</button>
   <button class="tab" onclick="showPage('aggregat',this)">Aggregat</button>
   <button class="tab" onclick="showPage('resultat',this)">Resultat</button>
+  <button class="tab" onclick="showPage('business',this)">Business case</button>
 </div>
 
 <!-- INDATA -->
@@ -124,6 +129,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 
   <div class="card">
+    <div class="card-title">System, referens och klimat</div>
+    <div class="row"><label>Systemtyp</label>
+      <select id="i_system" onchange="calc()" style="min-width:180px">
+        <option value="ftx" selected>FTX – till/frånluft med återvinning</option>
+        <option value="ftxkyla">FTX + kyla</option>
+        <option value="ft">FT – till/frånluft utan återvinning</option>
+        <option value="fx">FX – frånluft med återvinning</option>
+        <option value="f">F – frånluft</option>
+      </select>
+    </div>
+    <div class="row"><label>CO₂-faktor el</label><input type="number" id="i_co2_el" value="50" step="1" oninput="calc()"><span class="unit">g/kWh</span></div>
+    <div class="row"><label>CO₂-faktor värme</label><input type="number" id="i_co2_varme" value="60" step="1" oninput="calc()"><span class="unit">g/kWh</span></div>
+    <div class="note">Justera CO₂-faktorer efter kundens elavtal och värmeleverantör. Standardvärdena är schabloner för jämförelse.</div>
+  </div>
+
+  <div class="card">
     <div class="card-title">Benämningar</div>
     <div class="row"><label>Befintlig anläggning</label><input type="text" id="i_ben_bef" value="Befintligt" oninput="calc()"></div>
     <div class="row"><label>Ny anläggning</label><input type="text" id="i_ben_ny" value="Nytt" oninput="calc()"></div>
@@ -136,7 +157,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="row"><label>Real elprisökning</label><input type="number" id="i_el_okn" value="2" step="0.5" oninput="calc()"><span class="unit">%/år</span></div>
     <div class="row"><label>Real värmeprisökning</label><input type="number" id="i_vp_okn" value="5" step="0.5" oninput="calc()"><span class="unit">%/år</span></div>
     <div class="row"><label>Real kalkylränta</label><input type="number" id="i_kalkyl" value="5.5" step="0.5" oninput="calc()"><span class="unit">%</span></div>
-    <div class="row"><label>Brukstid</label><input type="number" id="i_bruk" value="1" step="1" min="1" max="30" oninput="calc()"><span class="unit">år</span></div>
+    <div class="row"><label>Brukstid</label><input type="number" id="i_bruk" value="15" step="1" min="1" max="30" oninput="calc()"><span class="unit">år</span></div>
   </div>
 
   <div class="card">
@@ -156,6 +177,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- RESULTAT -->
 <div id="page-resultat" class="page">
   <div id="res-content"><div class="card" style="text-align:center;color:#888;padding:24px">Fyll i indata och aggregat för att se resultat.</div></div>
+</div>
+
+<!-- BUSINESS CASE -->
+<div id="page-business" class="page">
+  <div id="business-content"><div class="card" style="text-align:center;color:#888;padding:24px">Fyll i indata och aggregat för att se business case.</div></div>
 </div>
 
 <div class="bottom-bar">
@@ -206,6 +232,13 @@ const KLIMAT = {
 const ORTER = ["Avesta","Bollnäs","Borlänge","Bräcke","Falun","Gävle","Hedemora","Hofors","Hudiksvall","Härnösand","Kramfors","Krokom","Ljusdal","Ludvika","Lycksele","Malung","Mora","Rättvik","Sandviken","Skellefteå","Sollefteå","Strömsund","Sundsvall","Sveg","Söderhamn","Timrå","Umeå","Umeå Flygplats","Vindeln","Åre","Ånge","Östersund","Örnsköldsvik","Sälen","Särna"];
 
 const DAGAR = [31,28,31,30,31,30,31,31,30,31,30,31];
+const SFP_REFS = {
+  ftx: {label:'FTX – till/frånluft med återvinning', target:1.5},
+  ftxkyla: {label:'FTX + kyla', target:1.6},
+  ft: {label:'FT – till/frånluft utan återvinning', target:1.1},
+  fx: {label:'FX – frånluft med återvinning', target:0.75},
+  f: {label:'F – frånluft', target:0.5}
+};
 var aggrCount = 0;
 var aggrIds = [];
 
@@ -228,6 +261,7 @@ function showPage(name, btn) {
   document.getElementById('page-'+name).classList.add('active');
   btn.classList.add('active');
   if(name==='resultat') renderResultat();
+  if(name==='business') renderBusiness();
 }
 
 function addAggregat() {
@@ -321,14 +355,22 @@ function calcVarme(q, vvx, T_till, T_fran, h_ar, klimat_temps) {
 }
 
 function calcSNV(pris, pris_okn_pct, kalkyl_pct, brukstid) {
-  var r = kalkyl_pct/100 - pris_okn_pct/100;
-  if(brukstid <= 1) return pris / (1 + r);
-  // Nuvärdesumma for n år
+  // Nuvärde av 1 kWh/år under kalkylperioden.
+  // År 1 diskonteras ett år och prisökning börjar från år 2.
+  var g = pris_okn_pct/100;
+  var r = kalkyl_pct/100;
   var sum = 0;
-  var faktor = (1 + pris_okn_pct/100) / (1 + kalkyl_pct/100);
-  var f = faktor;
-  for(var t=0;t<brukstid;t++) { sum += f; f *= faktor; }
-  return pris * sum / brukstid; // per år
+  for(var t=1; t<=brukstid; t++) {
+    sum += Math.pow(1 + g, t - 1) / Math.pow(1 + r, t);
+  }
+  return pris * sum;
+}
+
+function getSfpStatus(value, target) {
+  if(!isFinite(value) || value <= 0) return {text:'Saknas', cls:'warn'};
+  if(value <= target) return {text:'Under riktvärde', cls:'good'};
+  if(value <= target * 1.15) return {text:'Nära riktvärde', cls:'warn'};
+  return {text:'Över riktvärde', cls:'bad'};
 }
 
 
@@ -350,11 +392,15 @@ function calc() {
   var temps = KLIMAT[ort];
   var elpris = n('i_elpris'), vpris = n('i_vpris');
   var el_okn = n('i_el_okn'), vp_okn = n('i_vp_okn');
-  var kalkyl = n('i_kalkyl'), brukstid = n('i_bruk')||1;
+  var kalkyl = n('i_kalkyl'), brukstid = n('i_bruk')||15;
   var snv_el = calcSNV(elpris, el_okn, kalkyl, brukstid);
   var snv_vp = calcSNV(vpris, vp_okn, kalkyl, brukstid);
+  var systemKey = document.getElementById('i_system') ? document.getElementById('i_system').value : 'ftx';
+  var sfpRef = SFP_REFS[systemKey] || SFP_REFS.ftx;
+  var co2El = n('i_co2_el'), co2Varme = n('i_co2_varme');
 
   var tot_el_bef=0, tot_vp_bef=0, tot_el_ny=0, tot_vp_ny=0, tot_gt_bef=0, tot_gt_ny=0;
+  var tot_q_bef=0, tot_q_ny=0, tot_fan_bef=0, tot_fan_ny=0;
   var aggrRes = [];
 
   aggrIds.forEach(function(id) {
@@ -369,6 +415,7 @@ function calc() {
     var gt_bef = calcGradtimmar(vvx_bef, tt_bef, ft_bef, h_ar, temps);
     var el_bef = q_bef * sfp_bef * h_ar;
     var vp_bef = calcVarme(q_bef, vvx_bef, tt_bef, ft_bef, h_ar, temps);
+    tot_q_bef += q_bef; tot_fan_bef += q_bef * sfp_bef;
 
     // Nytt
     var q_ny=n(id+'_ny_q'), sfp_ny=n(id+'_ny_sfp');
@@ -376,6 +423,7 @@ function calc() {
     var gt_ny  = calcGradtimmar(vvx_ny,  tt_ny,  ft_ny,  h_ar, temps);
     var el_ny = q_ny * sfp_ny * h_ar;
     var vp_ny = calcVarme(q_ny, vvx_ny, tt_ny, ft_ny, h_ar, temps);
+    tot_q_ny += q_ny; tot_fan_ny += q_ny * sfp_ny;
 
     tot_el_bef+=el_bef; tot_vp_bef+=vp_bef; tot_gt_bef+=gt_bef;
     tot_el_ny+=el_ny; tot_vp_ny+=vp_ny; tot_gt_ny+=gt_ny;
@@ -397,6 +445,10 @@ function calc() {
   var lcce_ny_tot = tot_el_ny*snv_el + tot_vp_ny*snv_vp;
   var atg_bef = n('i_atg_bef'), atg_ny = n('i_atg_ny');
   var payoff = kostn_bef_tot > kostn_ny_tot ? (atg_ny - atg_bef) / (kostn_bef_tot - kostn_ny_tot) : Infinity;
+  var sfp_bef_avg = tot_q_bef > 0 ? tot_fan_bef / tot_q_bef : 0;
+  var sfp_ny_avg = tot_q_ny > 0 ? tot_fan_ny / tot_q_ny : 0;
+  var co2_kg_ar = ((tot_el_bef - tot_el_ny) * co2El + (tot_vp_bef - tot_vp_ny) * co2Varme) / 1000;
+  var lcc_diff = (lcce_bef_tot + atg_bef) - (lcce_ny_tot + atg_ny);
 
   lastResult = {
     aggrRes:aggrRes, ort:ort, tot_gt_bef:tot_gt_bef, tot_gt_ny:tot_gt_ny,
@@ -406,7 +458,11 @@ function calc() {
     lcce_bef_tot:lcce_bef_tot, lcce_ny_tot:lcce_ny_tot,
     payoff:payoff, atg_bef:atg_bef, atg_ny:atg_ny,
     snv_el:snv_el, snv_vp:snv_vp,
-    elpris:elpris, vpris:vpris
+    elpris:elpris, vpris:vpris, brukstid:brukstid,
+    systemLabel:sfpRef.label, sfpTarget:sfpRef.target,
+    sfp_bef_avg:sfp_bef_avg, sfp_ny_avg:sfp_ny_avg,
+    co2_kg_ar:co2_kg_ar, lcc_diff:lcc_diff,
+    co2El:co2El, co2Varme:co2Varme
   };
 
   // Bottombar
@@ -441,6 +497,15 @@ function renderResultat() {
   html += '<div class="payoff-lbl">Besparing ' + fmt(besparing) + ' kr/år  |  Ort: ' + ort + '</div>';
   html += '</div>';
 
+  var sfpBefStatus = getSfpStatus(r.sfp_bef_avg, r.sfpTarget);
+  var sfpNyStatus = getSfpStatus(r.sfp_ny_avg, r.sfpTarget);
+  html += '<div class="bc-grid">';
+  html += '<div class="bc-card"><div class="bc-lbl">SFP-viktat nuläge</div><div class="bc-val">' + fmtDec(r.sfp_bef_avg,2) + '</div><span class="tag ' + sfpBefStatus.cls + '">' + sfpBefStatus.text + '</span></div>';
+  html += '<div class="bc-card"><div class="bc-lbl">SFP-viktat nytt</div><div class="bc-val">' + fmtDec(r.sfp_ny_avg,2) + '</div><span class="tag ' + sfpNyStatus.cls + '">' + sfpNyStatus.text + '</span></div>';
+  html += '<div class="bc-card"><div class="bc-lbl">Referens</div><div class="bc-val">' + fmtDec(r.sfpTarget,2) + '</div><div class="bc-lbl">' + esc(r.systemLabel) + '</div></div>';
+  html += '<div class="bc-card"><div class="bc-lbl">CO₂-besparing</div><div class="bc-val">' + fmt(r.co2_kg_ar) + '</div><div class="bc-lbl">kg/år</div></div>';
+  html += '</div>';
+
   // Jämförelse totalblock
   html += '<div class="res-compare">';
   html += '<div class="res-col res-col-bef">';
@@ -449,7 +514,7 @@ function renderResultat() {
   html += '<div class="res-item"><div class="res-val">' + fmt(r.tot_vp_bef) + '</div><div class="res-lbl">Värmeenergi kWh/år</div></div>';
   html += '<div class="res-item"><div class="res-val">' + fmt(r.tot_gt_bef) + '</div><div class="res-lbl">Gradtimmar h/år</div></div>';
   html += '<div class="res-item"><div class="res-val">' + fmt(r.kostn_bef_tot) + '</div><div class="res-lbl">Driftkostnad kr/år</div></div>';
-  html += '<div class="res-item"><div class="res-val">' + fmt(r.lcce_bef_tot) + '</div><div class="res-lbl">LCCE kr</div></div>';
+  html += '<div class="res-item"><div class="res-val">' + fmt(r.lcce_bef_tot) + '</div><div class="res-lbl">LCCE ' + r.brukstid + ' år kr</div></div>';
   html += '</div>';
   html += '<div class="res-col res-col-ny">';
   html += '<div class="res-col-title">' + ben_ny + '</div>';
@@ -457,7 +522,7 @@ function renderResultat() {
   html += '<div class="res-item"><div class="res-val">' + fmt(r.tot_vp_ny) + '</div><div class="res-lbl">Värmeenergi kWh/år</div></div>';
   html += '<div class="res-item"><div class="res-val">' + fmt(r.tot_gt_ny) + '</div><div class="res-lbl">Gradtimmar h/år</div></div>';
   html += '<div class="res-item"><div class="res-val">' + fmt(r.kostn_ny_tot) + '</div><div class="res-lbl">Driftkostnad kr/år</div></div>';
-  html += '<div class="res-item"><div class="res-val">' + fmt(r.lcce_ny_tot) + '</div><div class="res-lbl">LCCE kr</div></div>';
+  html += '<div class="res-item"><div class="res-val">' + fmt(r.lcce_ny_tot) + '</div><div class="res-lbl">LCCE ' + r.brukstid + ' år kr</div></div>';
   html += '</div></div>';
 
   // Per aggregat
@@ -477,7 +542,7 @@ function renderResultat() {
   html += '<tr><td>Elenergi</td><td class="num">' + fmt(r.tot_el_bef) + '</td><td class="num">' + fmt(r.tot_el_bef*r.elpris) + '</td><td class="num">' + fmt(r.tot_el_ny) + '</td><td class="num">' + fmt(r.tot_el_ny*r.elpris) + '</td></tr>';
   html += '<tr><td>Värmeenergi</td><td class="num">' + fmt(r.tot_vp_bef) + '</td><td class="num">' + fmt(r.tot_vp_bef*r.vpris) + '</td><td class="num">' + fmt(r.tot_vp_ny) + '</td><td class="num">' + fmt(r.tot_vp_ny*r.vpris) + '</td></tr>';
   html += '<tr class="subtot"><td>Driftkostnad/år</td><td class="num">–</td><td class="num">' + fmt(r.kostn_bef_tot) + '</td><td class="num">–</td><td class="num">' + fmt(r.kostn_ny_tot) + '</td></tr>';
-  html += '<tr><td>LCCE</td><td class="num">–</td><td class="num">' + fmt(r.lcce_bef_tot) + '</td><td class="num">–</td><td class="num">' + fmt(r.lcce_ny_tot) + '</td></tr>';
+  html += '<tr><td>LCCE energi, ' + r.brukstid + ' år</td><td class="num">–</td><td class="num">' + fmt(r.lcce_bef_tot) + '</td><td class="num">–</td><td class="num">' + fmt(r.lcce_ny_tot) + '</td></tr>';
   html += '<tr><td>Åtgärdskostnad</td><td colspan="2" class="num">' + fmt(r.atg_bef) + ' kr</td><td colspan="2" class="num">' + fmt(r.atg_ny) + ' kr</td></tr>';
   html += '<tr class="tot"><td>Totalkostnad</td><td colspan="2" class="num">' + fmt(r.lcce_bef_tot+r.atg_bef) + ' kr</td><td colspan="2" class="num">' + fmt(r.lcce_ny_tot+r.atg_ny) + ' kr</td></tr>';
   html += '</table></div>';
@@ -488,10 +553,54 @@ function renderResultat() {
   html += '<div class="row"><label>Åtgärdskostnad ' + ben_bef + '</label><span style="font-weight:700">' + fmt(r.atg_bef) + ' kr</span></div>';
   html += '<div class="row"><label>Åtgärdskostnad ' + ben_ny + '</label><span style="font-weight:700">' + fmt(r.atg_ny) + ' kr</span></div>';
   html += '<div class="row"><label>Pay-off tid</label><span style="font-weight:700;font-size:18px;color:' + (payoffOk&&r.payoff<15?'#28a745':'#e0a000') + '">' + (payoffOk?fmtDec(r.payoff,1)+' år':'–') + '</span></div>';
+  html += '<div class="row"><label>LCC-fördel över kalkylperiod</label><span style="font-weight:700;color:' + (r.lcc_diff>0?'#28a745':'#d33') + '">' + fmt(r.lcc_diff) + ' kr</span></div>';
+  html += '<div class="row"><label>CO₂-besparing</label><span style="font-weight:700;color:#006390">' + fmt(r.co2_kg_ar) + ' kg/år</span></div>';
+  html += '</div>';
+
+  html += '<div class="card"><div class="card-title">Kvalitetskontroll</div>';
+  html += (r.sfp_ny_avg <= r.sfpTarget ? '<div class="ok">Föreslagen SFP ligger på eller under valt riktvärde.</div>' : '<div class="warn">Föreslagen SFP ligger över valt riktvärde. Kontrollera tryckfall, filter, kanalstråk, don och fläktval.</div>');
+  html += (r.brukstid >= 10 ? '<div class="ok">Kalkylperioden är rimlig för LCC-jämförelse.</div>' : '<div class="warn">Kort kalkylperiod kan underskatta LCC-nyttan. Kontrollera brukstid.</div>');
+  html += '<div class="warn">Resultatet är ett beslutsunderlag. Verifiera alltid luftflöden, SFP, drifttider, energipriser och CO₂-faktorer mot projektets verkliga data.</div>';
   html += '</div>';
 
   document.getElementById('res-content').innerHTML = html;
 }
+
+function renderBusiness() {
+  if(!lastResult) return;
+  var r = lastResult;
+  var besparing = r.kostn_bef_tot - r.kostn_ny_tot;
+  var totalSaving = besparing * r.brukstid;
+  var invDiff = r.atg_ny - r.atg_bef;
+  var roi = invDiff > 0 ? (r.lcc_diff / invDiff) * 100 : 0;
+  var payoffOk = isFinite(r.payoff) && r.payoff > 0;
+  var html = '';
+  html += '<div class="card"><div class="card-title">Business case – kundsammanfattning</div>';
+  html += '<div style="font-size:15px;line-height:1.6;color:#333">Genom att byta eller optimera ventilationsaggregatet beräknas driftkostnaden minska med <b>' + fmt(besparing) + ' kr/år</b>. Över ' + r.brukstid + ' år ger förslaget en LCC-effekt på <b>' + fmt(r.lcc_diff) + ' kr</b> jämfört med nuläget. CO₂-besparingen uppskattas till <b>' + fmt(r.co2_kg_ar) + ' kg/år</b>.</div>';
+  html += '</div>';
+
+  html += '<div class="bc-grid">';
+  html += '<div class="bc-card"><div class="bc-lbl">Årlig besparing</div><div class="bc-val">' + fmt(besparing) + '</div><div class="bc-lbl">kr/år</div></div>';
+  html += '<div class="bc-card"><div class="bc-lbl">Pay-off</div><div class="bc-val">' + (payoffOk?fmtDec(r.payoff,1):'–') + '</div><div class="bc-lbl">år</div></div>';
+  html += '<div class="bc-card"><div class="bc-lbl">LCC-fördel</div><div class="bc-val">' + fmt(r.lcc_diff) + '</div><div class="bc-lbl">kr över kalkylperiod</div></div>';
+  html += '<div class="bc-card"><div class="bc-lbl">CO₂-besparing</div><div class="bc-val">' + fmt(r.co2_kg_ar) + '</div><div class="bc-lbl">kg/år</div></div>';
+  html += '<div class="bc-card"><div class="bc-lbl">SFP nuläge</div><div class="bc-val">' + fmtDec(r.sfp_bef_avg,2) + '</div><div class="bc-lbl">kW/(m³/s)</div></div>';
+  html += '<div class="bc-card"><div class="bc-lbl">SFP förslag</div><div class="bc-val">' + fmtDec(r.sfp_ny_avg,2) + '</div><div class="bc-lbl">mål ' + fmtDec(r.sfpTarget,2) + '</div></div>';
+  html += '</div>';
+
+  html += '<div class="card"><div class="card-title">Rekommenderad nästa åtgärd</div>';
+  if(r.sfp_ny_avg > r.sfpTarget) {
+    html += '<div class="warn">Optimera projekterat tryckfall och fläktval innan förslaget lämnas till kund.</div>';
+  } else {
+    html += '<div class="ok">Teknisk riktning ser bra ut: använd business case för kunddialog och gå vidare med verifiering av verkliga drifttider och priser.</div>';
+  }
+  html += '<div class="row"><label>1. Verifiera driftdata</label><span>Logg/BMS, tidkanaler och mätvärden</span></div>';
+  html += '<div class="row"><label>2. Kontrollera SFP och tryckfall</label><span>Filter, batterier, don, spjäll och kanalstråk</span></div>';
+  html += '<div class="row"><label>3. Paketera erbjudande</label><span>Bas: injustering · Plus: styrning · Komplett: aggregat + uppföljning</span></div>';
+  html += '</div>';
+  document.getElementById('business-content').innerHTML = html;
+}
+
 </script>
 </body>
 </html>
