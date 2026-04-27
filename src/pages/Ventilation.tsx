@@ -29,7 +29,7 @@ const Ventilation = () => {
         Hem
       </Link>
       <iframe
-        src="/lcc-app.html"
+        src={`${import.meta.env.BASE_URL}lcc-app.html`}
         title="LCC-beräkning Ventilationsaggregat"
         className="w-full h-full border-0 block"
       />
